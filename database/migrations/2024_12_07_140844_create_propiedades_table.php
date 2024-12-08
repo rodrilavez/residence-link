@@ -16,7 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('zona_id');
             $table->string('nombre');
             $table->text('descripcion')->nullable();
-            $table->boolean('es_amenidad')->default(false); // true si es amenidad
+            $table->string('direccion');
+            $table->boolean('es_amenidad')->default(false);
             $table->timestamps();
 
             $table->foreign('zona_id')->references('id')->on('zonas')->onDelete('cascade');

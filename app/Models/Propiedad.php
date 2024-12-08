@@ -27,4 +27,9 @@ class Propiedad extends Model
     {
         return $this->hasOne(Residente::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

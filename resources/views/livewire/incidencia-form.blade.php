@@ -1,19 +1,25 @@
-<div>
-    <form wire:submit.prevent="store">
-        <div>
+<div class="container">
+    @if (session()->has('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <form wire:submit.prevent="store" class="form">
+        <div class="form-group">
             <label for="titulo">Título:</label>
-            <input type="text" id="titulo" wire:model="titulo">
+            <input type="text" id="titulo" wire:model="titulo" class="form-control">
             @error('titulo') <span class="error">{{ $message }}</span> @enderror
         </div>
-        <div>
+        <div class="form-group">
             <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" wire:model="descripcion"></textarea>
+            <textarea id="descripcion" wire:model="descripcion" class="form-control"></textarea>
             @error('descripcion') <span class="error">{{ $message }}</span> @enderror
         </div>
-        <button type="submit">Guardar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
 
-    <table>
+    <table class="table">
         <thead>
             <tr>
                 <th>Título</th>
@@ -27,8 +33,8 @@
                     <td>{{ $incidencia->titulo }}</td>
                     <td>{{ $incidencia->descripcion }}</td>
                     <td>
-                        <button wire:click="edit({{ $incidencia->id }})">Editar</button>
-                        <button wire:click="delete({{ $incidencia->id }})">Eliminar</button>
+                        <button wire:click="edit({{ $incidencia->id }})" class="btn btn-warning">Editar</button>
+                        <button wire:click="delete({{ $incidencia->id }})" class="btn btn-danger">Eliminar</button>
                     </td>
                 </tr>
             @endforeach

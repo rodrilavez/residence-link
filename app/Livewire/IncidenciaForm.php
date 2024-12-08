@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Incidencia;
+use Illuminate\Support\Facades\Auth;
 
 class IncidenciaForm extends Component
 {
@@ -15,7 +16,7 @@ class IncidenciaForm extends Component
 
     public function mount()
     {
-        $this->incidencias = Incidencia::all();
+        $this->incidencias = Incidencia::where('user_id', Auth::id())->get();
     }
 
     public function render()
@@ -39,12 +40,14 @@ class IncidenciaForm extends Component
         ]);
 
         Incidencia::create([
+            'user_id' => Auth::id(),
             'titulo' => $this->titulo,
-            'descripcion' => $this->descripcion
+            'descripcion' => $this->descripcion,
         ]);
 
         $this->resetForm();
-        $this->incidencias = Incidencia::all(); // Recargar datos
+        $this->incidencias = Incidencia::where('user_id', Auth::id())->get();
+        session()->flash('success', 'Incidencia reportada exitosamente.');
     }
 
     public function edit($id)
@@ -70,12 +73,12 @@ class IncidenciaForm extends Component
         ]);
 
         $this->resetForm();
-        $this->incidencias = Incidencia::all();
+        $this->incidencias = Incidencia::where('user_id', Auth::id())->get();
     }
 
     public function delete($id)
     {
         Incidencia::find($id)->delete();
-        $this->incidencias = Incidencia::all();
+        $this->incidencias = Incidencia::where('user_id', Auth::id())->get();
     }
 }

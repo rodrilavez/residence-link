@@ -1,9 +1,19 @@
 <div>
-    <form wire:submit.prevent="store" class="mb-4">
+    <form wire:submit.prevent="{{ $isEdit ? 'update' : 'store' }}">
         <div class="mb-3">
             <label for="nombre" class="form-label">Nombre:</label>
             <input type="text" id="nombre" wire:model="nombre" class="form-control">
             @error('nombre') <span class="text-danger">{{ $message }}</span> @enderror
+        </div>
+        <div class="mb-3">
+            <label for="zona_id" class="form-label">Zona:</label>
+            <select id="zona_id" wire:model="zona_id" class="form-control">
+                <option value="">Seleccione una zona</option>
+                @foreach($zonas as $zona)
+                    <option value="{{ $zona->id }}">{{ $zona->nombre }}</option>
+                @endforeach
+            </select>
+            @error('zona_id') <span class="text-danger">{{ $message }}</span> @enderror
         </div>
         <div class="mb-3">
             <label for="direccion" class="form-label">Dirección:</label>
@@ -11,11 +21,10 @@
             @error('direccion') <span class="text-danger">{{ $message }}</span> @enderror
         </div>
         <div class="mb-3">
-            <label for="precio" class="form-label">Precio:</label>
-            <input type="text" id="precio" wire:model="precio" class="form-control">
-            @error('precio') <span class="text-danger">{{ $message }}</span> @enderror
+            <label for="es_amenidad" class="form-label">Es Amenidad:</label>
+            <input type="checkbox" id="es_amenidad" wire:model="es_amenidad" class="form-check-input">
         </div>
-        <button type="submit" class="btn btn-success">Guardar</button>
+        <button type="submit" class="btn btn-success">{{ $isEdit ? 'Actualizar' : 'Guardar' }}</button>
     </form>
 
     <table class="table table-striped">
@@ -23,7 +32,8 @@
             <tr>
                 <th>Nombre</th>
                 <th>Dirección</th>
-                <th>Precio</th>
+                <th>Zona</th>
+                <th>Amenidad</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -32,7 +42,8 @@
                 <tr>
                     <td>{{ $propiedad->nombre }}</td>
                     <td>{{ $propiedad->direccion }}</td>
-                    <td>{{ $propiedad->precio }}</td>
+                    <td>{{ $propiedad->zona->nombre }}</td>
+                    <td>{{ $propiedad->es_amenidad ? 'Sí' : 'No' }}</td>
                     <td>
                         <button wire:click="edit({{ $propiedad->id }})" class="btn btn-primary btn-sm">Editar</button>
                         <button wire:click="delete({{ $propiedad->id }})" class="btn btn-danger btn-sm">Eliminar</button>

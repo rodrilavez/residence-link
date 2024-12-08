@@ -37,13 +37,18 @@ class ZonasTable extends Component
             'nombre' => 'required',
         ]);
 
-        Zona::create([
-            'nombre' => $this->nombre,
-            'descripcion' => $this->descripcion
-        ]);
+        try {
+            Zona::create([
+                'nombre' => $this->nombre,
+                'descripcion' => $this->descripcion
+            ]);
 
-        $this->resetForm();
-        $this->zonas = Zona::all(); // Recargar datos
+            $this->resetForm();
+            $this->zonas = Zona::all(); // Recargar datos
+            session()->flash('success', 'Zona creada exitosamente.');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error al crear la zona.');
+        }
     }
 
     public function edit($id)
@@ -61,19 +66,35 @@ class ZonasTable extends Component
             'nombre' => 'required',
         ]);
 
-        $zona = Zona::find($this->zonaId);
-        $zona->update([
-            'nombre' => $this->nombre,
-            'descripcion' => $this->descripcion
-        ]);
+        try {
+            $zona = Zona::find($this->zonaId);
+            $zona->update([
+                'nombre' => $this->nombre,
+                'descripcion' => $this->descripcion
+            ]);
 
-        $this->resetForm();
-        $this->zonas = Zona::all();
+            $this->resetForm();
+            $this->zonas = Zona::all();
+            session()->flash('success', 'Zona actualizada exitosamente.');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error al actualizar la zona.');
+        }
     }
 
     public function delete($id)
     {
-        Zona::find($id)->delete();
-        $this->zonas = Zona::all();
+        try {
+            $zona = Zona::find($id);
+            
+            if ($zona) {
+                $zona->delete();
+                $this->zonas = Zona::all();
+                session()->flash('success', 'Zona eliminada exitosamente.');
+            } else {
+                session()->flash('error', 'La zona no existe.');
+            }
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error al eliminar la zona.');
+        }
     }
 }
