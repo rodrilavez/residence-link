@@ -10,12 +10,10 @@ class CreateIncidenciasTable extends Migration
     {
         Schema::create('incidencias', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->string('titulo');
-            $table->text('descripcion');
+            $table->string('descripcion');
+            $table->foreignId('residente_id')->nullable()->constrained('residentes');
+            $table->foreignId('amenidad_id')->nullable()->constrained('amenidades');
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

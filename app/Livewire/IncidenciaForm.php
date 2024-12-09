@@ -3,20 +3,33 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use App\Models\Residente;
+use App\Models\Amenidad;
 use App\Models\Incidencia;
 use Illuminate\Support\Facades\Auth;
 
 class IncidenciaForm extends Component
 {
-    public $incidencias;
-    public $titulo;
+    public $residentes;
+    public $amenidades;
+    public $residente_id;
+    public $amenidad_id;
     public $descripcion;
-    public $incidenciaId;
-    public $isEdit = false;
 
     public function mount()
     {
-        $this->incidencias = Incidencia::where('user_id', Auth::id())->get();
+        $guardia = Auth::user()->guardia;
+        if ($guardia) {
+            $zonaId = $guardia->zona_id;
+            $this->residentes = Residente::whereHas('propiedad', function ($query) use ($zonaId) {
+                $query->where('zona_id', $zonaId);
+            })->with('user')->get();
+
+            $this->amenidades = Amenidad::where('zona_id', $zonaId)->get();
+        } else {
+            $this->residentes = collect();
+            $this->amenidades = collect();
+        }
     }
 
     public function render()
@@ -24,61 +37,21 @@ class IncidenciaForm extends Component
         return view('livewire.incidencia-form');
     }
 
-    public function resetForm()
-    {
-        $this->titulo = '';
-        $this->descripcion = '';
-        $this->incidenciaId = null;
-        $this->isEdit = false;
-    }
-
-    public function store()
+    public function assignIncidencia()
     {
         $this->validate([
-            'titulo' => 'required',
-            'descripcion' => 'required',
+            'residente_id' => 'required|exists:residentes,id',
+            'amenidad_id' => 'nullable|exists:amenidades,id',
+            'descripcion' => 'required|string',
         ]);
 
         Incidencia::create([
-            'user_id' => Auth::id(),
-            'titulo' => $this->titulo,
+            'residente_id' => $this->residente_id,
+            'amenidad_id' => $this->amenidad_id,
             'descripcion' => $this->descripcion,
         ]);
 
-        $this->resetForm();
-        $this->incidencias = Incidencia::where('user_id', Auth::id())->get();
-        session()->flash('success', 'Incidencia reportada exitosamente.');
-    }
-
-    public function edit($id)
-    {
-        $incidencia = Incidencia::find($id);
-        $this->incidenciaId = $incidencia->id;
-        $this->titulo = $incidencia->titulo;
-        $this->descripcion = $incidencia->descripcion;
-        $this->isEdit = true;
-    }
-
-    public function update()
-    {
-        $this->validate([
-            'titulo' => 'required',
-            'descripcion' => 'required',
-        ]);
-
-        $incidencia = Incidencia::find($this->incidenciaId);
-        $incidencia->update([
-            'titulo' => $this->titulo,
-            'descripcion' => $this->descripcion
-        ]);
-
-        $this->resetForm();
-        $this->incidencias = Incidencia::where('user_id', Auth::id())->get();
-    }
-
-    public function delete($id)
-    {
-        Incidencia::find($id)->delete();
-        $this->incidencias = Incidencia::where('user_id', Auth::id())->get();
+        session()->flash('success', 'Incidencia asignada exitosamente.');
+        $this->reset(['residente_id', 'amenidad_id', 'descripcion']);
     }
 }

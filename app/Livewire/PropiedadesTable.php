@@ -5,6 +5,8 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Propiedad;
 use App\Models\Zona;
+use App\Models\User;
+use App\Models\Residente;
 
 class PropiedadesTable extends Component
 {
@@ -16,11 +18,32 @@ class PropiedadesTable extends Component
     public $propiedadId;
     public $es_amenidad = false;
     public $isEdit;
+    public $user_id;
+    public $usuarios;
+    public $residentes;
 
     public function mount()
     {
         $this->propiedades = Propiedad::all();
-        $this->zonas = Zona::all(); // Cargar todas las zonas para el dropdown
+        $this->zonas = Zona::all();
+        $this->usuarios = User::where('role', 'residente')->get();
+        $this->residentes = Residente::with('propiedad.zona', 'user')->get();
+    }
+
+    public function assign()
+    {
+        $this->validate([
+            'user_id' => 'required|exists:users,id',
+            'propiedad_id' => 'required|exists:propiedades,id',
+        ]);
+
+        Residente::updateOrCreate(
+            ['user_id' => $this->user_id],
+            ['propiedad_id' => $this->propiedad_id]
+        );
+
+        $this->residentes = Residente::with('propiedad.zona', 'user')->get();
+        session()->flash('success', 'Propiedad asignada exitosamente.');
     }
 
     public function render()

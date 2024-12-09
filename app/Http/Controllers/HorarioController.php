@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Horario;
 use Illuminate\Http\Request;
+use App\Notifications\CambioDeTurnoNotification;
 
 class HorarioController extends Controller
 {
@@ -57,7 +58,15 @@ class HorarioController extends Controller
             return response()->json(['message' => 'No autorizado'], 403);
         }
 
+        // Lógica para actualizar el horario
         $horario->update($request->all());
+
+        // Enviar notificación al guardia
+        $guardia = $horario->guardia->user;
+        if ($guardia) {
+            $guardia->notify(new CambioDeTurnoNotification());
+        }
+
         return response()->json($horario, 200);
     }
 

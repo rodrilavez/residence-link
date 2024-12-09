@@ -9,11 +9,7 @@ class Residente extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'user_id',
-        'propiedad_id',
-        'telefono',
-    ];
+    protected $fillable = ['user_id', 'propiedad_id', 'nombre', 'edad', 'telefono'];
 
     public function user()
     {

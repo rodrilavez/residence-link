@@ -4,18 +4,24 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Guardia;
+use App\Models\User;
+use App\Models\Zona;
 
 class GuardiasTable extends Component
 {
     public $guardias;
-    public $nombre;
-    public $turno;
+    public $user_id;
+    public $zona_id;
     public $guardiaId;
     public $isEdit = false;
+    public $usuariosGuard;
+    public $zonas;
 
     public function mount()
     {
-        $this->guardias = Guardia::all();
+        $this->guardias = Guardia::with(['user', 'zona'])->get();
+        $this->usuariosGuard = User::where('role', 'guard')->get();
+        $this->zonas = Zona::all();
     }
 
     public function render()
@@ -25,8 +31,8 @@ class GuardiasTable extends Component
 
     public function resetForm()
     {
-        $this->nombre = '';
-        $this->turno = '';
+        $this->user_id = '';
+        $this->zona_id = '';
         $this->guardiaId = null;
         $this->isEdit = false;
     }
@@ -34,48 +40,48 @@ class GuardiasTable extends Component
     public function store()
     {
         $this->validate([
-            'nombre' => 'required',
-            'turno' => 'required',
+            'user_id' => 'required|exists:users,id',
+            'zona_id' => 'required|exists:zonas,id',
         ]);
 
         Guardia::create([
-            'nombre' => $this->nombre,
-            'turno' => $this->turno
+            'user_id' => $this->user_id,
+            'zona_id' => $this->zona_id,
         ]);
 
         $this->resetForm();
-        $this->guardias = Guardia::all(); // Recargar datos
+        $this->guardias = Guardia::with(['user', 'zona'])->get(); // Recargar datos
     }
 
     public function edit($id)
     {
         $guardia = Guardia::find($id);
         $this->guardiaId = $guardia->id;
-        $this->nombre = $guardia->nombre;
-        $this->turno = $guardia->turno;
+        $this->user_id = $guardia->user_id;
+        $this->zona_id = $guardia->zona_id;
         $this->isEdit = true;
     }
 
     public function update()
     {
         $this->validate([
-            'nombre' => 'required',
-            'turno' => 'required',
+            'user_id' => 'required|exists:users,id',
+            'zona_id' => 'required|exists:zonas,id',
         ]);
 
         $guardia = Guardia::find($this->guardiaId);
         $guardia->update([
-            'nombre' => $this->nombre,
-            'turno' => $this->turno
+            'user_id' => $this->user_id,
+            'zona_id' => $this->zona_id,
         ]);
 
         $this->resetForm();
-        $this->guardias = Guardia::all();
+        $this->guardias = Guardia::with(['user', 'zona'])->get();
     }
 
     public function delete($id)
     {
         Guardia::find($id)->delete();
-        $this->guardias = Guardia::all();
+        $this->guardias = Guardia::with(['user', 'zona'])->get();
     }
 }

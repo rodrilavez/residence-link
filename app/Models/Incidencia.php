@@ -10,10 +10,9 @@ class Incidencia extends Model
     use HasFactory;
 
     protected $fillable = [
-        'residente_id',
-        'propiedad_id',
         'descripcion',
-        'estado',
+        'residente_id',
+        'amenidad_id',
     ];
 
     public function residente()
@@ -21,8 +20,8 @@ class Incidencia extends Model
         return $this->belongsTo(Residente::class);
     }
 
-    public function propiedad()
+    public function amenidad()
     {
-        return $this->belongsTo(Propiedad::class);
+        return $this->belongsTo(Amenidad::class);
     }
 }

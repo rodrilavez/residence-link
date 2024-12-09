@@ -55,20 +55,23 @@ class DatabaseSeeder extends Seeder
             'zona_id' => $zona1->id,
             'nombre' => 'Casa 101',
             'descripcion' => 'Casa en zona A',
-            'es_amenidad' => false
+            'es_amenidad' => false,
+            'direccion'=> 'Calle Falsa 123'
         ]);
 
         $propAmenidad = Propiedad::create([
             'zona_id' => $zona1->id,
             'nombre' => 'Piscina Comunitaria',
             'descripcion' => 'Piscina de la zona A',
-            'es_amenidad' => true
+            'es_amenidad' => true,
+            'direccion'=> 'sin direccion'
         ]);
 
-        // Asignar residente a una propiedad
+        // Asignar residente a una propiedad existente
         Residente::create([
             'user_id' => $residenteUser->id,
             'propiedad_id' => $prop1->id,
+            'nombre' => 'Juan Pérez',
             'telefono' => '555-1234'
         ]);
 
@@ -83,6 +86,12 @@ class DatabaseSeeder extends Seeder
             'guardia_id' => $guardia1->id,
             'inicio' => now(),
             'fin' => now()->addHours(8),
+        ]);
+
+        $this->call([
+            PropertiesTableSeeder::class,
+            AmenitiesTableSeeder::class,
+            ResidentsTableSeeder::class,
         ]);
     }
 }

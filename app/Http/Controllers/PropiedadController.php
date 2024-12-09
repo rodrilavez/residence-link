@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Propiedad;
 use Illuminate\Http\Request;
+use App\Models\Zona;
 
 class PropiedadController extends Controller
 {
@@ -60,5 +61,11 @@ class PropiedadController extends Controller
 
         $propiedad->delete();
         return response()->json(null, 204);
+    }
+
+    public function create()
+    {
+        $zonas = Zona::all(); // Asegúrate de que estás obteniendo todas las zonas
+        return view('propiedades.create', compact('zonas'));
     }
 }

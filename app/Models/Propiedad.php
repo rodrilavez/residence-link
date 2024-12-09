@@ -16,6 +16,7 @@ class Propiedad extends Model
         'nombre',
         'descripcion',
         'es_amenidad',
+        'direccion',
     ];
 
     public function zona()

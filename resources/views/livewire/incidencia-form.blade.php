@@ -1,43 +1,30 @@
-<div class="container">
-    @if (session()->has('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
+<div>
+    <form wire:submit.prevent="assignIncidencia">
+        <div class="mb-3">
+            <label for="residente_id" class="form-label">Residente:</label>
+            <select id="residente_id" wire:model="residente_id" class="form-control">
+                <option value="">Seleccione un residente</option>
+                @foreach($residentes as $residente)
+                    <option value="{{ $residente->id }}">{{ $residente->user->name }}</option>
+                @endforeach
+            </select>
+            @error('residente_id') <span class="text-danger">{{ $message }}</span> @enderror
         </div>
-    @endif
-
-    <form wire:submit.prevent="store" class="form">
-        <div class="form-group">
-            <label for="titulo">Título:</label>
-            <input type="text" id="titulo" wire:model="titulo" class="form-control">
-            @error('titulo') <span class="error">{{ $message }}</span> @enderror
+        <div class="mb-3">
+            <label for="amenidad_id" class="form-label">Amenidad:</label>
+            <select id="amenidad_id" wire:model="amenidad_id" class="form-control">
+                <option value="">Seleccione una amenidad</option>
+                @foreach($amenidades as $amenidad)
+                    <option value="{{ $amenidad->id }}">{{ $amenidad->nombre }}</option>
+                @endforeach
+            </select>
+            @error('amenidad_id') <span class="text-danger">{{ $message }}</span> @enderror
         </div>
-        <div class="form-group">
-            <label for="descripcion">Descripción:</label>
+        <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción:</label>
             <textarea id="descripcion" wire:model="descripcion" class="form-control"></textarea>
-            @error('descripcion') <span class="error">{{ $message }}</span> @enderror
+            @error('descripcion') <span class="text-danger">{{ $message }}</span> @enderror
         </div>
-        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button type="submit" class="btn btn-primary">Asignar Incidencia</button>
     </form>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Título</th>
-                <th>Descripción</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($incidencias as $incidencia)
-                <tr>
-                    <td>{{ $incidencia->titulo }}</td>
-                    <td>{{ $incidencia->descripcion }}</td>
-                    <td>
-                        <button wire:click="edit({{ $incidencia->id }})" class="btn btn-warning">Editar</button>
-                        <button wire:click="delete({{ $incidencia->id }})" class="btn btn-danger">Eliminar</button>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
 </div>

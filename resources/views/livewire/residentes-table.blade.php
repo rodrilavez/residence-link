@@ -1,42 +1,52 @@
 <div>
-    <form wire:submit.prevent="store" class="mb-4">
+    @if (session()->has('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <form wire:submit.prevent="assignProperty">
         <div class="mb-3">
-            <label for="nombre" class="form-label">Nombre:</label>
-            <input type="text" id="nombre" wire:model="nombre" class="form-control">
-            @error('nombre') <span class="text-danger">{{ $message }}</span> @enderror
+            <label for="user_id" class="form-label">Usuario:</label>
+            <select id="user_id" wire:model="user_id" class="form-control">
+                <option value="">Seleccione un usuario</option>
+                @foreach($usuarios as $usuario)
+                    <option value="{{ $usuario->id }}">{{ $usuario->name }} ({{ $usuario->email }})</option>
+                @endforeach
+            </select>
+            @error('user_id') <span class="text-danger">{{ $message }}</span> @enderror
         </div>
         <div class="mb-3">
-            <label for="edad" class="form-label">Edad:</label>
-            <input type="text" id="edad" wire:model="edad" class="form-control">
-            @error('edad') <span class="text-danger">{{ $message }}</span> @enderror
+            <label for="propiedad_id" class="form-label">Propiedad:</label>
+            <select id="propiedad_id" wire:model="propiedad_id" class="form-control">
+                <option value="">Seleccione una propiedad</option>
+                @foreach($propiedades as $propiedad)
+                    <option value="{{ $propiedad->id }}">{{ $propiedad->nombre }} - {{ $propiedad->direccion }}</option>
+                @endforeach
+            </select>
+            @error('propiedad_id') <span class="text-danger">{{ $message }}</span> @enderror
         </div>
-        <div class="mb-3">
-            <label for="direccion" class="form-label">Dirección:</label>
-            <input type="text" id="direccion" wire:model="direccion" class="form-control">
-            @error('direccion') <span class="text-danger">{{ $message }}</span> @enderror
-        </div>
-        <button type="submit" class="btn btn-success">Guardar</button>
+        <button type="submit" class="btn btn-primary">Asignar Propiedad</button>
     </form>
 
-    <table class="table table-striped">
+    <table class="table mt-4">
         <thead>
             <tr>
                 <th>Nombre</th>
-                <th>Edad</th>
+                <th>Email</th>
+                <th>Propiedad</th>
                 <th>Dirección</th>
-                <th>Acciones</th>
+                <th>Zona</th>
             </tr>
         </thead>
         <tbody>
             @foreach($residentes as $residente)
                 <tr>
-                    <td>{{ $residente->nombre }}</td>
-                    <td>{{ $residente->edad }}</td>
-                    <td>{{ $residente->direccion }}</td>
-                    <td>
-                        <button wire:click="edit({{ $residente->id }})" class="btn btn-primary btn-sm">Editar</button>
-                        <button wire:click="delete({{ $residente->id }})" class="btn btn-danger btn-sm">Eliminar</button>
-                    </td>
+                    <td>{{ $residente->user->name }}</td>
+                    <td>{{ $residente->user->email }}</td>
+                    <td>{{ $residente->propiedad->nombre }}</td>
+                    <td>{{ $residente->propiedad->direccion }}</td>
+                    <td>{{ $residente->propiedad->zona->nombre }}</td>
                 </tr>
             @endforeach
         </tbody>

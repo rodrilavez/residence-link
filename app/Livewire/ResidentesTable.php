@@ -4,78 +4,42 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Residente;
+use App\Models\Propiedad;
+use App\Models\User;
 
 class ResidentesTable extends Component
 {
+    public $user_id;
+    public $propiedad_id;
+    public $usuarios;
+    public $propiedades;
     public $residentes;
-    public $nombre;
-    public $email;
-    public $residenteId;
-    public $isEdit = false;
 
     public function mount()
     {
-        $this->residentes = Residente::all();
+        $this->usuarios = User::where('role', 'residente')->get();
+        $this->propiedades = Propiedad::all();
+        $this->residentes = Residente::with('propiedad.zona', 'user')->get();
+    }
+
+    public function assignProperty()
+    {
+        $this->validate([
+            'user_id' => 'required|exists:users,id',
+            'propiedad_id' => 'required|exists:propiedades,id',
+        ]);
+
+        Residente::updateOrCreate(
+            ['user_id' => $this->user_id],
+            ['propiedad_id' => $this->propiedad_id]
+        );
+
+        $this->residentes = Residente::with('propiedad.zona', 'user')->get();
+        session()->flash('success', 'Propiedad asignada exitosamente.');
     }
 
     public function render()
     {
         return view('livewire.residentes-table');
-    }
-
-    public function resetForm()
-    {
-        $this->nombre = '';
-        $this->email = '';
-        $this->residenteId = null;
-        $this->isEdit = false;
-    }
-
-    public function store()
-    {
-        $this->validate([
-            'nombre' => 'required',
-            'email' => 'required|email',
-        ]);
-
-        Residente::create([
-            'nombre' => $this->nombre,
-            'email' => $this->email
-        ]);
-
-        $this->resetForm();
-        $this->residentes = Residente::all(); // Recargar datos
-    }
-
-    public function edit($id)
-    {
-        $residente = Residente::find($id);
-        $this->residenteId = $residente->id;
-        $this->nombre = $residente->nombre;
-        $this->email = $residente->email;
-        $this->isEdit = true;
-    }
-
-    public function update()
-    {
-        $this->validate([
-            'nombre' => 'required',
-            'email' => 'required|email',
-        ]);
-
-        $residente = Residente::find($this->residenteId);
-        $residente->update([
-            'nombre' => $this->nombre,
-            'email' => $this->email
-        ]);
-
-        $this->resetForm();
-        $this->residentes = Residente::all();
-    }
-
-    public function delete($id)
-    {
-        Residente::find($id)->delete();
-        $this->residentes = Residente::all();
     }
 }

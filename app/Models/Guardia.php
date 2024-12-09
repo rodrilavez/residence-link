@@ -9,10 +9,7 @@ class Guardia extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'user_id',
-        'zona_id',
-    ];
+    protected $fillable = ['user_id', 'zona_id'];
 
     public function user()
     {

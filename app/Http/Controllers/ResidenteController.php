@@ -30,14 +30,10 @@ class ResidenteController extends Controller
 
     public function store(Request $request)
     {
-        // Admin crea residentes (asignando un user_id existente, o creando el usuario antes)
-        if ($request->user()->role !== 'admin') {
-            return response()->json(['message' => 'No autorizado'], 403);
-        }
-
+        // Validar que la propiedad existe
         $request->validate([
             'user_id' => 'required|exists:users,id',
-            'propiedad_id' => 'nullable|exists:propiedades,id',
+            'propiedad_id' => 'required|exists:propiedades,id',
             'telefono' => 'nullable'
         ]);
 
