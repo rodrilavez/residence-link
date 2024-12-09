@@ -10,18 +10,13 @@ class Incidencia extends Model
     use HasFactory;
 
     protected $fillable = [
-        'descripcion',
         'residente_id',
-        'amenidad_id',
+        'descripcion',
+        'estado',
     ];
 
     public function residente()
     {
         return $this->belongsTo(Residente::class);
-    }
-
-    public function amenidad()
-    {
-        return $this->belongsTo(Amenidad::class);
     }
 }

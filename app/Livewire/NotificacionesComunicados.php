@@ -3,8 +3,7 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use App\Models\Notificacion;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Notification;
 
 class NotificacionesComunicados extends Component
 {
@@ -12,7 +11,7 @@ class NotificacionesComunicados extends Component
 
     public function mount()
     {
-        $this->notificaciones = Notificacion::where('user_id', Auth::id())->get();
+        $this->notificaciones = Notification::latest()->get();
     }
 
     public function render()

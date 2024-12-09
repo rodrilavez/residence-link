@@ -20,4 +20,14 @@ class Residente extends Model
     {
         return $this->belongsTo(Propiedad::class);
     }
+
+    public function pagos()
+    {
+        return $this->hasMany(Pago::class, 'user_id', 'user_id');
+    }
+
+    public function incidencias()
+    {
+        return $this->hasMany(Incidencia::class);
+    }
 }

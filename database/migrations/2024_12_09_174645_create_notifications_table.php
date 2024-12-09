@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reservas', function (Blueprint $table) {
+        Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('amenidad_id')->constrained();
-            $table->foreignId('user_id')->constrained();
-            $table->date('fecha_reserva');
+            $table->string('title');
+            $table->text('message');
+            $table->foreignId('user_id')->constrained(); // Admin who sent the notification
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reservas');
+        Schema::dropIfExists('notifications');
     }
 };

@@ -51,9 +51,46 @@
             </div>
           </div>
 
+          <div class="card-row">
+            <div class="card">
+              <h2>Asignar Turnos</h2>
+              @livewire('assign-turno')
+            </div>
+
+            <div class="card">
+              <h2>Enviar Recordatorios de Pago</h2>
+              @livewire('recordatorios-pagos')
+            </div>
+          </div>
+
+          <div class="card-row">
+            <div class="card">
+              <h2>Incidencias</h2>
+              @livewire('admin-incidencias')
+            </div>
+          </div>
+
           <div class="card">
-            <h2>Asignar Turnos</h2>
-            @livewire('assign-turno')
+            <h2>Enviar Notificaciones y Comunicados</h2>
+            <div>
+                @livewire('admin-notifications')
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Reservas de Amenidades</h2>
+            <div>
+                @livewire('admin-reservas-amenidades')
+            </div>
+          </div>
+
+          <div class="card-row">
+            <div class="card">
+              <h2>Registro de Actividades</h2>
+              <div>
+                @livewire('admin-ver-actividades')
+              </div>
+            </div>
           </div>
         </section>
 
@@ -62,7 +99,7 @@
           <div class="card-row">
             <div class="card">
               <h2>Registro de Actividades</h2>
-              @livewire('registro-actividades')
+              @livewire('guard-registro-actividades')
             </div>
 
             <div class="card">
@@ -71,9 +108,11 @@
             </div>
           </div>
 
-          <div class="card">
-            <h2>Visualización de Residentes y Propiedades</h2>
-            @livewire('residentes-propiedades')
+          <div class="card-row">
+            <div class="card">
+              <h2>Visualización de Residentes y Propiedades</h2>
+              @livewire('residentes-propiedades')
+            </div>
           </div>
         </section>
 
@@ -83,18 +122,18 @@
             <div class="card">
               <h2>Mis Propiedades y Amenidades</h2>
               <div>
-                @livewire('amenidades-zona')
+                @livewire('mis-propiedades')
               </div>
               <div>
-                @livewire('mis-propiedades')
+                @livewire('amenidades-zona')
               </div>
             </div>
 
             <div class="card">
               <h2>Reservas de Amenidades</h2>
               <div>
-                @livewire('reservas-amenidades')
                 @livewire('mis-reservas')
+                @livewire('reservas-amenidades')
               </div>
             </div>
           </div>
@@ -110,17 +149,18 @@
             <div class="card">
               <h2>Reportar Incidencia</h2>
               <div>
-                @livewire('incidencia-form')
                 @livewire('estado-incidencias')
+                @livewire('incidencia-form')
               </div>
             </div>
           </div>
 
-          <div class="card">
-            <h2>Historial Financiero</h2>
-            <div>
-              @livewire('historial-financiero')
-              @livewire('recordatorios-pagos')
+          <div class="card-row">
+            <div class="card">
+              <h2>Recordatorios de Pago</h2>
+              <div>
+                @livewire('ver-recordatorios-pagos')
+              </div>
             </div>
           </div>
         </section>
@@ -160,12 +200,19 @@
     gap: 20px;
   }
 
+  .card-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
   .card {
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
     padding: 20px;
+    flex: 1 1 calc(50% - 20px); /* Two cards per row */
   }
 
   .card h2 {

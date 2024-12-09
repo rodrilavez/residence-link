@@ -27,4 +27,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Guardia::class);
     }
+
+    public function residente()
+    {
+        return $this->hasOne(Residente::class);
+    }
 }

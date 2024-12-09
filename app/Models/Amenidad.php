@@ -2,15 +2,20 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Reserva;
 
 class Amenidad extends Model
 {
-    protected $table = 'amenidades';
-    protected $fillable = ['nombre', 'descripcion', 'zona_id'];
+    use HasFactory;
 
-    public function zona()
+    protected $fillable = ['nombre', 'descripcion'];
+
+    protected $table = 'amenidades';
+
+    public function reservas()
     {
-        return $this->belongsTo(Zona::class);
+        return $this->hasMany(Reserva::class);
     }
 }

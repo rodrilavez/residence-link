@@ -10,12 +10,11 @@ class CreatePagosTable extends Migration
     {
         Schema::create('pagos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('user_id')->constrained();
+            $table->date('fecha_recordatorio')->nullable();
             $table->decimal('monto', 8, 2);
-            $table->string('descripcion');
+            $table->text('mensaje');
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

@@ -9,7 +9,7 @@ class Actividad extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'tipo', 'descripcion', 'residente_id', 'amenidad_id'];
+    protected $fillable = ['user_id', 'tipo', 'descripcion'];
     protected $table = 'actividades';
 
     public function user()

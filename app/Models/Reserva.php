@@ -12,7 +12,7 @@ class Reserva extends Model
     protected $fillable = [
         'user_id',
         'amenidad_id',
-        'fecha',
+        'fecha_reserva',
     ];
 
     public function user()
