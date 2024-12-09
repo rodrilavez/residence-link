@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('propiedades', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('zona_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('nombre');
             $table->text('descripcion')->nullable();
             $table->string('direccion');
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('zona_id')->references('id')->on('zonas')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
