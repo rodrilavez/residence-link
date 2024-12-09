@@ -47,7 +47,7 @@ class RegistroActividades extends Component
             'amenidad_id' => $this->amenidad_id,
         ]);
 
-        session()->flash('success', 'Actividad registrada exitosamente.');
+        session()->flash('success', 'Actividad registrada con éxito.');
         $this->reset(['tipo', 'descripcion', 'residente_id', 'amenidad_id']);
         $this->loadActividades();
     }

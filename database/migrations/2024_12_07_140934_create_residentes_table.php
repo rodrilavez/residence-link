@@ -13,8 +13,6 @@ class CreateResidentesTable extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('propiedad_id')->constrained('propiedades');
             $table->string('nombre')->nullable();
-            $table->integer('edad');
-            $table->string('telefono');
             $table->timestamps();
         });
     }

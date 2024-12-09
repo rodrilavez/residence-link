@@ -38,18 +38,22 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($propiedades as $propiedad)
+            @forelse($propiedades as $propiedad)
                 <tr>
                     <td>{{ $propiedad->nombre }}</td>
                     <td>{{ $propiedad->direccion }}</td>
-                    <td>{{ $propiedad->zona->nombre }}</td>
+                    <td>{{ $propiedad->zona->nombre ?? 'Sin zona' }}</td>
                     <td>{{ $propiedad->es_amenidad ? 'Sí' : 'No' }}</td>
                     <td>
                         <button wire:click="edit({{ $propiedad->id }})" class="btn btn-primary btn-sm">Editar</button>
                         <button wire:click="delete({{ $propiedad->id }})" class="btn btn-danger btn-sm">Eliminar</button>
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="5" class="text-center">No hay propiedades registradas.</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 </div>

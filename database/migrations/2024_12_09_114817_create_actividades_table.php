@@ -10,8 +10,9 @@ class CreateActividadesTable extends Migration
     {
         Schema::create('actividades', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('residente_id')->nullable()->constrained()->onDelete('cascade');
-            $table->foreignId('amenidad_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('residente_id')->nullable()->constrained('residentes')->onDelete('cascade');
+            $table->foreignId('amenidad_id')->nullable()->constrained('amenidades')->onDelete('cascade');
             $table->string('tipo');
             $table->text('descripcion')->nullable();
             $table->timestamps();

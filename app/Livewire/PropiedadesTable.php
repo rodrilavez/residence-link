@@ -7,6 +7,7 @@ use App\Models\Propiedad;
 use App\Models\Zona;
 use App\Models\User;
 use App\Models\Residente;
+use Illuminate\Support\Facades\Auth;
 
 class PropiedadesTable extends Component
 {
@@ -64,6 +65,7 @@ class PropiedadesTable extends Component
             'zona_id' => $this->zona_id,
             'direccion' => $this->direccion,
             'es_amenidad' => $this->es_amenidad ?? false,
+            'user_id' => Auth::id(),
         ]);
 
         $this->resetForm();
@@ -82,12 +84,16 @@ class PropiedadesTable extends Component
     public function edit($id)
     {
         $propiedad = Propiedad::find($id);
-        $this->propiedadId = $propiedad->id;
-        $this->nombre = $propiedad->nombre;
-        $this->zona_id = $propiedad->zona_id;
-        $this->direccion = $propiedad->direccion;
-        $this->es_amenidad = $propiedad->es_amenidad;
-        $this->isEdit = true;
+        if ($propiedad) {
+            $this->propiedadId = $propiedad->id;
+            $this->nombre = $propiedad->nombre;
+            $this->zona_id = $propiedad->zona_id;
+            $this->direccion = $propiedad->direccion;
+            $this->es_amenidad = $propiedad->es_amenidad;
+            $this->isEdit = true;
+        } else {
+            session()->flash('error', 'La propiedad no existe.');
+        }
     }
 
     public function update()
@@ -99,16 +105,20 @@ class PropiedadesTable extends Component
         ]);
 
         $propiedad = Propiedad::find($this->propiedadId);
-        $propiedad->update([
-            'nombre' => $this->nombre,
-            'zona_id' => $this->zona_id,
-            'direccion' => $this->direccion,
-            'es_amenidad' => $this->es_amenidad ?? false,
-        ]);
+        if ($propiedad) {
+            $propiedad->update([
+                'nombre' => $this->nombre,
+                'zona_id' => $this->zona_id,
+                'direccion' => $this->direccion,
+                'es_amenidad' => $this->es_amenidad ?? false,
+            ]);
 
-        $this->resetForm();
-        $this->propiedades = Propiedad::all();
-        session()->flash('success', 'Propiedad actualizada exitosamente.');
+            $this->resetForm();
+            $this->propiedades = Propiedad::all();
+            session()->flash('success', 'Propiedad actualizada exitosamente.');
+        } else {
+            session()->flash('error', 'La propiedad no existe.');
+        }
     }
 
     public function delete($id)
